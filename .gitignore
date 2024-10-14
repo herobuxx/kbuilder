@@ -1,0 +1,11 @@
+# Ignore clang directiry
+clang/
+
+# Ignore linux src directiry
+src/
+
+# Ignore packaging directiry
+packaging/
+
+# Ignore every tarball files in root
+*.tar.gz
