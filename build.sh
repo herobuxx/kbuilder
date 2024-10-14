@@ -2,24 +2,18 @@
 #
 # Copyright © 2024 Akif Fathur <me@buxxed.me>
 #
-# USage: ./build.sh KERNEL_VERSION
+# USage: ./build.sh
 #
-
-# Check if KERNEL_VERSION is provided
-if [ -z "$1" ]; then
-    echo "Error: Kernel version is not specified."
-    echo "Usage: ./build_kernel.sh <KERNEL_VERSION>"
-    exit 1
-fi
 
 WORK_DIR=$(pwd)
 SRC_DIR=${WORK_DIR}/src
 CLANG_DIR=${WORK_DIR}/clang
 INSTALL_MODULES_DIR=${SRC_DIR}/install_modules
 INSTALL_DIR=${WORK_DIR}/packaging
-KERNEL_URL=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-KERNEL_VERSION=$1
-CPU_CORES=$(nproc)
+KERNEL_URL=https://github.com/herobuxx/linux.git
+KERNEL_BRANCH=6.11-main
+KERNEL_VERSION=v6.11.3
+CPU_CORES=32
 CC_PATH="${CLANG_DIR}/bin/clang"
 KERNEL_LOCALVERSION=lilium
 START_TIME=$(date +%s)
@@ -67,8 +61,8 @@ else
 fi
 
 # Cloning Kernel source
-echo "Downloading Linux Kernel $KERNEL_VERSION..."
-git clone $KERNEL_URL -b-$KERNEL_VERSION src/
+echo "Downloading Linux Kernel source..."
+git clone $KERNEL_URL -b-$KERNEL_BRANCH $SRC_DIR
 cd ${SRC_DIR}
 
 # Step 3: Configure the Kernel
