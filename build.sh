@@ -43,7 +43,7 @@ if [ -d "$SRC_DIR" ]; then
     cd "$WORK_DIR"
 else
     echo "SRC_DIR does not exist. Exiting script."
-    exit 1
+    echo "Skipping..."
 fi
 
 # Prepare Clang
@@ -62,7 +62,7 @@ fi
 
 # Cloning Kernel source
 echo "Downloading Linux Kernel source..."
-git clone $KERNEL_URL -b-$KERNEL_BRANCH $SRC_DIR
+git clone $KERNEL_URL -b $KERNEL_BRANCH $SRC_DIR --depth 1
 cd ${SRC_DIR}
 
 # Step 3: Configure the Kernel
@@ -75,13 +75,13 @@ fi
 
 # Build the Kernel
 echo "Building the Kernel with $CPU_CORES cores..."
-make -j$CPU_CORES CC="ccache $CC_PATH" \
+make -j$CPU_CORES CC="$CC_PATH" \
     LOCALVERSION=-$KERNEL_LOCALVERSION
 
 # Build Kernel Modules
 echo "Building Kernel Modules..."
 make modules \
-    CC="ccache $CC_PATH" \
+    CC="$CC_PATH" \
     LOCALVERSION=-$KERNEL_LOCALVERSION \
     -j$CPU_CORES
 
@@ -89,7 +89,7 @@ make modules \
 echo "Installing kernel modules..."
 make modules_install \
     INSTALL_MOD_PATH="$INSTALL_MODULES_DIR"  \
-    CC="ccache $CC_PATH" \
+    CC="$CC_PATH" \
     DEPMOD=/doesnt/exist \
     INSTALL_MOD_STRIP=1 \
     LOCALVERSION=-$KERNEL_LOCALVERSION \
